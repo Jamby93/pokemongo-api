@@ -183,24 +183,22 @@ class PokemonGOAPI {
         }
 
         for (let cell of cells) {
-            objects.spawn_points.push(cell.spawn_points)
-            objects.deleted_objects.push(cell.deleted_objects)
-            objects.fort_summaries.push(cell.fort_summaries)
-            objects.decimated_spawn_points.push(cell.decimated_spawn_points)
+            Array.prototype.push.apply(objects.spawn_points, cell.spawn_points)
+            Array.prototype.push.apply(objects.deleted_objects, cell.deleted_objects)
+            Array.prototype.push.apply(objects.fort_summaries, cell.fort_summaries)
+            Array.prototype.push.apply(objects.decimated_spawn_points, cell.decimated_spawn_points)
 
-            cell.wild_pokemons.map(pokemon => {
-                pokemon.pokemon_id = pokemon.pokemon_data.pokemon_id,
-                    objects.wild_pokemons.push(new Pokemon(pokemon, this))
-            })
+            Array.prototype.push.apply(objects.wild_pokemons, cell.wild_pokemons.map(pokemon => {
+                pokemon.pokemon_id = pokemon.pokemon_data.pokemon_id;
+                return new Pokemon(pokemon, this);
+            }))
 
-            cell.catchable_pokemons.map(pokemon => {
-                pokemon.catchable = true
-                objects.catchable_pokemons.push(new Pokemon(pokemon, this))
-            })
+            Array.prototype.push.apply(objects.catchable_pokemons, cell.catchable_pokemons.map(pokemon => {
+                pokemon.catchable = true;
+                return new Pokemon(pokemon, this);
+            }))
 
-            cell.nearby_pokemons.map(pokemon =>
-                objects.nearby_pokemons.push(new Pokemon(pokemon, this))
-            )
+            Array.prototype.push.apply(objects.nearby_pokemons, cell.nearby_pokemons.map(pokemon => new Pokemon(pokemon, this)))
 
             cell.forts.map(fort => {
                 fort = Fort(fort, this)
